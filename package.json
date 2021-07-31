@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-  	"test": "mocha api/v1.0/modules/user/test/*.js",
+    "test": "mocha api/v1.0/modules/user/test/*.js",
     "start": "NODE_ENV=DEV node ./bin/www",
     "start:testing": "NODE_ENV=TEST node ./bin/www",
     "start:production": "NODE_ENV=PROD node ./bin/www"
