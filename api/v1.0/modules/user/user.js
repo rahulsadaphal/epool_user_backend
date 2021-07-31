@@ -15,7 +15,7 @@ class UserService {
   async registration(info) {
     const connection = await mysql.connection();
     try {
-
+      console.log("");
 
 
     } catch (error) {
