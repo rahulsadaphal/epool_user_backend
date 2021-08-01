@@ -15,10 +15,41 @@ class UserService {
   async registration(info) {
     const connection = await mysql.connection();
     try {
-      console.log("");
+      const payload = {
+        "name": "Cody William",
+        "email": "xyz@yopmail.com",
+        "phone": "0987654321",
+        "roleId": ""
+      };
+      console.log("----------INSIDE REGISTRATION ROUTE-------------", info);
+      await connection.query("START TRANSACTION");
+
+      let resp = await connection.query(`
+      set @flag = '0';
+      call sp_register(?,?,?,?,@flag);
+      select @flag;
+      `, [info.name, info.email, info.phone, info.roleId]);
+      await connection.query("COMMIT");
+      if (resp[2][0]['@flag'] == 'successfully added new user') {
+        return {
+          statusCode: statusCode.success,
+          // message: message.success,
+          message: resp[2][0]['@flag'],
+          data: []
+        };
+      } else {
+        return {
+          statusCode: statusCode.success,
+          // message: message.success,
+          message: resp[2][0]['@flag'],
+          data: []
+        };
+      }
+
 
 
     } catch (error) {
+      await connection.query("ROLLBACK");
       throw {
         statusCode: error.statusCode,
         message: error.message,
