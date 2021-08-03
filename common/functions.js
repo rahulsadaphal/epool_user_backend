@@ -283,33 +283,8 @@ function responseGenerator(statusCode, message, data = '') {
  * @param {*} return (decrypted data)
  */
 async function sendEmail(to, subject, message) {
-  // var transporter = nodemailer.createTransport({
-  //   service: 'gmail',
-  //   auth: {
-  //     user: config.SMTPemailAddress,
-  //     pass: config.SMTPPassword,
-  //   },
-  // });
 
-  // var transporter = nodemailer.createTransport({
-  //   service: "Outlook365",
-  //   auth: {
-  //     user: config.emailUser,
-  //     pass: config.emailPassword
-  //   }
-
-  // });
-
-  // var transporter = nodemailer.createTransport({
-  //   name: config.SMTP_HOST,
-  //   host: config.SMTP_HOST,
-  //   port: 465,
-  //   secure: true,
-  //   auth: {
-  //     user: config.SMTP_EMAILADDRESS,
-  //     pass: config.SMTP_PASS,
-  //   },
-  // });
+  console.log("------INSIDE SEND EMAIL FUNCTION-------------", to, subject, message);
 
   var transporter = nodemailer.createTransport({
     service: 'Godaddy',

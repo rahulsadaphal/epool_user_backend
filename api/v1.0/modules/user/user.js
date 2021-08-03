@@ -33,6 +33,7 @@ class UserService {
       `, [info.name, info.email, info.phone, info.roleId, password]);
       await connection.query("COMMIT");
       if (resp[2][0]['@flag'] == 'successfully added new user') {
+        console.log("-------INSIDE SUCCESS BLOCK---------");
         let emailMessage = fs
           .readFileSync('./common/emailtemplate/welcome.html', 'utf8')
           .toString();
