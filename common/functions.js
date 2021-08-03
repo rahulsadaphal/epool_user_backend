@@ -286,33 +286,19 @@ async function sendEmail(to, subject, message) {
 
   console.log("------INSIDE SEND EMAIL FUNCTION-------------", to, subject, message);
 
-  // var transporter = nodemailer.createTransport({
-  //   service: 'Godaddy',
-  //   host: "smtpout.secureserver.net",
-  //   secure: true,
-  //   port: 465,
-
-  //   auth: {
-  //     user: config.emailUser,
-  //     pass: config.emailPassword
-  //   }
-  // });
-
   var transporter = nodemailer.createTransport({
+    service: 'Godaddy',
     host: "smtpout.secureserver.net",
-    secure: true,
-    secureConnection: false, // TLS requires secureConnection to be false
-    tls: {
-      ciphers: "SSLv3",
-    },
-    requireTLS: true,
-    port: 465,
-    debug: true,
+    secure: false,
+    // port: 465,
+    port: 25,
     auth: {
       user: config.emailUser,
       pass: config.emailPassword
-    },
+    }
   });
+
+
 
   var mailOptions = {
     from: `${config.fromName}<${config.emailUser}>`,
