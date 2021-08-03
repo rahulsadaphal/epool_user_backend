@@ -38,7 +38,9 @@ class UserService {
           .readFileSync('./common/emailtemplate/welcome.html', 'utf8')
           .toString();
         emailMessage = emailMessage
-          .replace('$fullname', info.name.charAt(0).toUpperCase() + info.name.slice(1));
+          .replace('$fullname', info.name.charAt(0).toUpperCase() + info.name.slice(1))
+          .replace('$link', info.roleId == 1 ? config.emailVerificationLinkCustomer : config.emailVerificationLinkOwner);
+
 
         functions.sendEmail(
           info.email,
