@@ -291,14 +291,14 @@ async function sendEmail(to, subject, message) {
   //   },
   // });
 
-  var transporter = nodemailer.createTransport({
-    service: "Outlook365",
-    auth: {
-      user: config.emailUser,
-      pass: config.emailPassword
-    }
+  // var transporter = nodemailer.createTransport({
+  //   service: "Outlook365",
+  //   auth: {
+  //     user: config.emailUser,
+  //     pass: config.emailPassword
+  //   }
 
-  });
+  // });
 
   // var transporter = nodemailer.createTransport({
   //   name: config.SMTP_HOST,
@@ -311,8 +311,20 @@ async function sendEmail(to, subject, message) {
   //   },
   // });
 
+  var transporter = nodemailer.createTransport({
+    service: 'Godaddy',
+    host: "smtpout.secureserver.net",
+    secure: true,
+    port: 465,
+
+    auth: {
+      user: config.emailUser,
+      pass: config.emailPassword
+    }
+  });
+
   var mailOptions = {
-    from: `${config.SMTP_FROMNAME}<${config.emailUser}>`,
+    from: `${config.fromName}<${config.emailUser}>`,
     to: to,
     subject: subject,
     html: message,
