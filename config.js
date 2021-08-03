@@ -14,5 +14,6 @@ module.exports = {
   emailUser: process.env.EMAIL_USER,
   emailPassword: process.env.EMAIL_PASSWORD,
   supportEmail: process.env.SUPPORT_EMAIL,
+  fromName: process.env.SMTP_FROMNAME,
 
 };

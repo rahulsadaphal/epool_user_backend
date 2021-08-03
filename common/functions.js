@@ -291,28 +291,28 @@ async function sendEmail(to, subject, message) {
   //   },
   // });
 
-  // var transporter = nodemailer.createTransport({
-  //   service: "Outlook365",
-  //   auth: {
-  //     user: config.emailUser,
-  //     pass: config.emailPassword
-  //   }
+  var transporter = nodemailer.createTransport({
+    service: "Outlook365",
+    auth: {
+      user: config.emailUser,
+      pass: config.emailPassword
+    }
 
+  });
+
+  // var transporter = nodemailer.createTransport({
+  //   name: config.SMTP_HOST,
+  //   host: config.SMTP_HOST,
+  //   port: 465,
+  //   secure: true,
+  //   auth: {
+  //     user: config.SMTP_EMAILADDRESS,
+  //     pass: config.SMTP_PASS,
+  //   },
   // });
 
-  var transporter = nodemailer.createTransport({
-    name: config.SMTP_HOST,
-    host: config.SMTP_HOST,
-    port: 465,
-    secure: true,
-    auth: {
-      user: config.SMTP_EMAILADDRESS,
-      pass: config.SMTP_PASS,
-    },
-  });
-  console.log("---------INSIDE EMAIL SEND----------", `${config.SMTP_FROMNAME}<${config.SMTP_EMAILADDRESS}>`);
   var mailOptions = {
-    from: `${config.SMTP_FROMNAME}<${config.SMTP_EMAILADDRESS}>`,
+    from: `${config.SMTP_FROMNAME}<${config.emailUser}>`,
     to: to,
     subject: subject,
     html: message,

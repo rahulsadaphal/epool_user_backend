@@ -55,7 +55,7 @@ module.exports = {
   emailVerificationSuccess:
     'Email address successfully verified. Please login to continue',
   emailLinkExpired: 'Link has expired.',
-  registrationEmailSubject: 'Welcome to ToonSutra',
+  registrationEmailSubject: 'Welcome to Epool',
   enquirySubject: "Enquiry Email",
   passwordChanged: 'Password changed successfully',
   invalidPassword: 'Password is not valid',

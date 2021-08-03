@@ -24,13 +24,26 @@ class UserService {
       console.log("----------INSIDE REGISTRATION ROUTE-------------", info);
       await connection.query("START TRANSACTION");
 
+      const password = functions.encryptPassword(info.password);
+
       let resp = await connection.query(`
       set @flag = '0';
-      call sp_register(?,?,?,?,@flag);
+      call sp_register(?,?,?,?,?,@flag);
       select @flag;
-      `, [info.name, info.email, info.phone, info.roleId]);
+      `, [info.name, info.email, info.phone, info.roleId, password]);
       await connection.query("COMMIT");
       if (resp[2][0]['@flag'] == 'successfully added new user') {
+        let emailMessage = fs
+          .readFileSync('./common/emailtemplate/welcome.html', 'utf8')
+          .toString();
+        emailMessage = emailMessage
+          .replace('$fullname', info.name.charAt(0).toUpperCase() + info.name.slice(1));
+
+        functions.sendEmail(
+          info.email,
+          message.registrationEmailSubject,
+          emailMessage
+        );
         return {
           statusCode: statusCode.success,
           // message: message.success,
@@ -39,7 +52,7 @@ class UserService {
         };
       } else {
         return {
-          statusCode: statusCode.success,
+          statusCode: statusCode.fail,
           // message: message.success,
           message: resp[2][0]['@flag'],
           data: []
