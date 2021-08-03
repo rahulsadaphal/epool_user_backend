@@ -310,6 +310,7 @@ async function sendEmail(to, subject, message) {
     console.log("--------smsDetails------------", smsDetails);
     return smsDetails;
   } catch (error) {
+    console.log(error);
     errorHandler(error);
   }
 }
