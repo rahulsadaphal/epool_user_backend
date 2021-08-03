@@ -287,7 +287,7 @@ async function sendEmail(to, subject, message) {
   console.log("------INSIDE SEND EMAIL FUNCTION-------------", to, subject, message);
 
   var transporter = nodemailer.createTransport({
-    service: 'Godaddy',
+    // service: 'Godaddy',
     host: "smtpout.secureserver.net",
     secure: true,
     port: 465,
