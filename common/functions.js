@@ -332,6 +332,7 @@ async function sendEmail(to, subject, message) {
 
   try {
     const smsDetails = await transporter.sendMail(mailOptions);
+    console.log("--------smsDetails------------", smsDetails);
     return smsDetails;
   } catch (error) {
     errorHandler(error);
