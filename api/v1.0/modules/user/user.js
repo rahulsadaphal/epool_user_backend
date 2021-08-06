@@ -109,7 +109,7 @@ class UserService {
 
       let resp = await connection.query(`
       call sp_verifyEmail(?,?);
-      `, [tokenDecrypt.data.email, info.roleId]);
+      `, [tokenDecrypt.data, info.roleId]);
 
       console.log("-----------RESP------------", resp);
 
