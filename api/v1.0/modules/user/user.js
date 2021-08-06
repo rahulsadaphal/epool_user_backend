@@ -134,7 +134,8 @@ class UserService {
     const connection = await mysql.connection();
     const payload = {
       "email": "",
-      "password": ""
+      "password": "",
+      "roleId": ""
     };
     try {
       console.log("-----------INSIDE USER SERVICE LOGIN API-------------", info)
