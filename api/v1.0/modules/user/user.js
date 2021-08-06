@@ -93,7 +93,7 @@ class UserService {
       // config.emailVerificationLinkOwner + '?token=' + token + "&email=" + info.email + "&roleId=" + info.roleId +
       //   "&flag=verifyEmail"
 
-      const token = Buffer.from(info.payload, 'hex').toString('ascii');
+      const token = Buffer.from(info.code, 'hex').toString('ascii');
       const tokenDecrypt = await functions.tokenDecrypt(token);
       if (tokenDecrypt.message === 'jwt expired') {
         throw {
