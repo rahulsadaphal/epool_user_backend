@@ -113,7 +113,7 @@ class UserService {
       return {
         statusCode: statusCode.success,
         message: message.emailVerificationSuccess,
-        data: verifyEmailDetails,
+        data: null,
       };
 
     } catch (error) {
@@ -192,6 +192,70 @@ class UserService {
         message: message.success,
         data: finalData,
       };
+
+
+    } catch (error) {
+      // await connection.query("ROLLBACK");
+      throw {
+        statusCode: error.statusCode,
+        message: error.message,
+        data: error
+      };
+    }
+    finally {
+      await connection.release();
+    }
+  }
+
+  async resendVerificationLink(info) {
+    const connection = await mysql.connection();
+    const payload = {
+      "email": "",
+      "roleId": ""
+    };
+    try {
+      console.log("-----------INSIDE USER SERVICE - RESEND VERIFICATION LINK API-------------", info)
+
+      // await connection.query("START TRANSACTION");
+
+      let checkUser = await connection.query(`select Id, name, email, phone, isDeleted, isVerified, createdOn, updatedOn,
+      roleId, isFirstTimeLogin, password from data_user where email = ? and roleId = ?`, [info.email, info.roleId]);
+      if (checkUser.length <= 0) {
+        throw {
+          statusCode: statusCode.bad_request,
+          message: message.emailNotExists,
+          data: null,
+        };
+      }
+
+      let token = await functions.tokenEncrypt(info.email, 300);
+      token = Buffer.from(token, 'ascii').toString('hex');
+      let emailMessage = fs
+        .readFileSync('./common/emailtemplate/welcome.html', 'utf8')
+        .toString();
+      emailMessage = emailMessage
+        .replace('$fullname', checkUser[0].name.charAt(0).toUpperCase() + checkUser[0].name.slice(1))
+        .replace('$link', info.roleId == 1 ? config.emailVerificationLinkCustomer + '?code=' + token + "&email=" + info.email + "&roleId=" + info.roleId +
+          "&flag=verifyEmail" : config.emailVerificationLinkOwner + '?code=' + token + "&email=" + info.email + "&roleId=" + info.roleId +
+          "&flag=verifyEmail");
+
+
+      functions.sendEmail(
+        info.email,
+        message.registrationEmailSubject,
+        emailMessage
+      );
+      return {
+        statusCode: statusCode.success,
+        message: message.success,
+        data: null
+      };
+
+
+
+      // await connection.query("COMMIT");
+
+
 
 
     } catch (error) {

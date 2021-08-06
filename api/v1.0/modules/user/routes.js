@@ -5,6 +5,7 @@ const auth = require('../../../../common/authentication');
 
 router.post('/registration', auth.decryptRequest, api.registration);
 router.post('/login', auth.decryptRequest, api.login);
+router.post('/resendVerificationLink', auth.decryptRequest, api.resendVerificationLink);
 router.post('/verifyEmail', auth.decryptRequest, api.verifyEmail);
 router.post(
   '/changePassword',

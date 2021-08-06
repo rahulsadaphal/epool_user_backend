@@ -90,6 +90,23 @@ const controller = {
     }
   },
 
+  resendVerificationLink: async (req, res, next) => {
+    try {
+      const resendLinkDetails = await object
+        .userService()
+        .resendVerificationLink(res.locals.requestedData);
+      res.send(
+        functions.responseGenerator(
+          resendLinkDetails.statusCode,
+          resendLinkDetails.message,
+          resendLinkDetails.data
+        )
+      );
+    } catch (error) {
+      return next(error);
+    }
+  },
+
   // Change Password API
   changePassword: async (req, res, next) => {
     try {
