@@ -105,9 +105,14 @@ class UserService {
 
       await connection.query("START TRANSACTION");
 
+      console.log("-----------TOKEN DATA------------", tokenDecrypt.data);
+
       let resp = await connection.query(`
       call sp_verifyEmail(?,?);
       `, [tokenDecrypt.data.email, info.roleId]);
+
+      console.log("-----------RESP------------", resp);
+
       await connection.query("COMMIT");
 
       return {
