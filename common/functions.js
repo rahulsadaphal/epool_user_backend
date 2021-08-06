@@ -224,9 +224,9 @@ function decryptPassword(data) {
  * @param {*} data (data to encrypt)
  * @param {*} return (encrypted data)
  */
-async function tokenEncrypt(data) {
+async function tokenEncrypt(data, expiry) {
   var token = await jwt.sign({ data: data }, config.tokenkey, {
-    expiresIn: 24 * 60 * 60,
+    expiresIn: expiry ? expiry : 24 * 60 * 60,
   }); // Expires in 1 day
   return token;
 }

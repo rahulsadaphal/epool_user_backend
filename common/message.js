@@ -51,7 +51,7 @@ module.exports = {
   duplicateDetails: 'Email Address already exists',
   otpSent: "Your account is not verified, Please verify your account",
   invalidReferralCode: "You have entered an invalid referral code",
-  emailVerify: 'Please complete email verification process',
+  emailVerify: 'Your email is not verified, Please complete email verification process',
   emailVerificationSuccess:
     'Email address successfully verified. Please login to continue',
   emailLinkExpired: 'Link has expired.',
