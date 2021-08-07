@@ -378,7 +378,7 @@ class UserService {
       let resp = await connection.query(`update data_user set password = ? where email = ? and roleId = ?`,
         [
           password,
-          tokenDecrypt.data,
+          emailAddressDetails.data,
           info.roleId
         ]);
 
