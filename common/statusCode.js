@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-  success: 00,
-  fail: 01
+  success: "00",
+  fail: "01"
 
 };
