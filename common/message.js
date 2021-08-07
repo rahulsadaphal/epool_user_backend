@@ -59,7 +59,7 @@ module.exports = {
   enquirySubject: "Enquiry Email",
   passwordChanged: 'Password changed successfully',
   invalidPassword: 'Password is not valid',
-  forgotPasswordSubject: 'ToonSutra, Forgot password link',
+  forgotPasswordSubject: 'Forgot password link',
   forgotPasswordOTP: "ToonSutra, OTP for reset password",
   resetLink:
     'Reset link sent successfully. You will receive a link shortly if a user is registered.',

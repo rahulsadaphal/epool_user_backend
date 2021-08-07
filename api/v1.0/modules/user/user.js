@@ -41,8 +41,8 @@ class UserService {
           .toString();
         emailMessage = emailMessage
           .replace('$fullname', info.name.charAt(0).toUpperCase() + info.name.slice(1))
-          .replace('$link', info.roleId == 1 ? config.emailVerificationLinkCustomer + '?code=' + token + "&email=" + info.email + "&roleId=" + info.roleId +
-            "&flag=verifyEmail" : config.emailVerificationLinkOwner + '?code=' + token + "&email=" + info.email + "&roleId=" + info.roleId +
+          .replace('$link', info.roleId == 1 ? config.backendServerUrlCustomer + "/verify_email" + '?code=' + token + "&email=" + info.email + "&roleId=" + info.roleId +
+            "&flag=verifyEmail" : config.backendServerUrlOwner + "/verify_email" + '?code=' + token + "&email=" + info.email + "&roleId=" + info.roleId +
             "&flag=verifyEmail");
 
 
@@ -151,14 +151,14 @@ class UserService {
       roleId, isFirstTimeLogin, password from data_user where email = ? and roleId = ?`, [info.email, info.roleId]);
       if (checkUser.length <= 0) {
         throw {
-          statusCode: statusCode.bad_request,
+          statusCode: statusCode.fail,
           message: message.emailNotExists,
           data: null,
         };
       }
       if (checkUser[0].isVerified !== 1) {
         throw {
-          statusCode: statusCode.bad_request,
+          statusCode: statusCode.fail,
           message: message.emailVerify,
           data: null,
         };
@@ -166,7 +166,7 @@ class UserService {
 
       if (checkUser[0].isDeleted === 1) {
         throw {
-          statusCode: statusCode.bad_request,
+          statusCode: statusCode.fail,
           message: message.accountDisable,
           data: null,
         };
@@ -175,7 +175,7 @@ class UserService {
       const password = functions.decryptPassword(checkUser[0].password);
       if (password !== info.password) {
         throw {
-          statusCode: statusCode.bad_request,
+          statusCode: statusCode.fail,
           message: message.invalidLoginDetails,
           data: null,
         };
@@ -227,7 +227,7 @@ class UserService {
       roleId, isFirstTimeLogin, password from data_user where email = ? and roleId = ?`, [info.email, info.roleId]);
       if (checkUser.length <= 0) {
         throw {
-          statusCode: statusCode.bad_request,
+          statusCode: statusCode.fail,
           message: message.emailNotExists,
           data: null,
         };
@@ -256,12 +256,7 @@ class UserService {
         data: null
       };
 
-
-
       // await connection.query("COMMIT");
-
-
-
 
     } catch (error) {
       // await connection.query("ROLLBACK");
@@ -297,9 +292,48 @@ class UserService {
   async forgotPassword(info) {
     const connection = await mysql.connection();
 
+    const payload = {
+      "email": "",
+      "roleId": ""
+    };
+
     try {
+      console.log("----------INSIDE USER SERVICE - FORGOT PASSWORD API-------------", info);
+
+      let checkUser = await connection.query(`select Id, name, email, phone, isDeleted, isVerified, createdOn, updatedOn,
+      roleId, isFirstTimeLogin, password from data_user where email = ? and roleId = ?`, [info.email, info.roleId]);
+      if (checkUser.length <= 0) {
+        throw {
+          statusCode: statusCode.fail,
+          message: message.emailNotExists,
+          data: null,
+        };
+      }
+
+      let token = await functions.tokenEncrypt(info.email, 300);
+      token = Buffer.from(token, 'ascii').toString('hex');
+      const link = info.roleId == 1 ? config.backendServerUrlCustomer + "/reset_password" + "?code=" + token + "&email=" + info.email + "&roleId=" + info.roleId
+        + "&flag=passwordReset" : config.backendServerUrlOwner + "/reset_password" + "?code=" + token + "&email=" + info.email + "&roleId=" + info.roleId
+        + "&flag=passwordReset"
+      let emailMessage = fs
+        .readFileSync('./common/emailtemplate/reset.html', 'utf8')
+        .toString();
+      emailMessage = emailMessage
+        .replace('$fullname', checkUser[0].name.charAt(0).toUpperCase() + checkUser[0].name.slice(1))
+        .replace('$link', link);
 
 
+      functions.sendEmail(
+        info.email,
+        message.forgotPasswordSubject,
+        emailMessage
+      );
+
+      return {
+        statusCode: statusCode.success,
+        message: message.success,
+        data: null
+      };
 
 
     } catch (error) {
@@ -318,9 +352,47 @@ class UserService {
 
   async resetPassword(info) {
     const connection = await mysql.connection();
+    const payload = {
+      "code": "",
+      "roleId": "",
+      "newPassword": ""
+    };
     try {
+      console.log("---------INSIDE USER_SERVICE - RESET PASSWORD API-----------", info);
+
+      const emailAddress = Buffer.from(info.code, 'hex').toString(
+        'ascii'
+      );
+      const emailAddressDetails = await functions.tokenDecrypt(emailAddress);
+      if (!emailAddressDetails.data) {
+        throw {
+          statusCode: statusCode.fail,
+          message: message.emailLinkExpired,
+          data: null,
+        };
+      }
+      const password = functions.encryptPassword(info.newPassword);
+
+      await connection.query("START TRANSACTION");
+
+      let resp = await connection.query(`update data_user set password = ? where email = ? and roleId = ?`,
+        [
+          password,
+          tokenDecrypt.data,
+          info.roleId
+        ]);
+
+      await connection.query("COMMIT");
+
+      return {
+        statusCode: statusCode.success,
+        message: message.passwordReset,
+        data: null
+      };
+
 
     } catch (error) {
+      await connection.query("ROLLBACK");
       throw {
         statusCode: error.statusCode,
         message: error.message,

@@ -7,12 +7,7 @@ router.post('/registration', auth.decryptRequest, api.registration);
 router.post('/login', auth.decryptRequest, api.login);
 router.post('/resendVerificationLink', auth.decryptRequest, api.resendVerificationLink);
 router.post('/verifyEmail', auth.decryptRequest, api.verifyEmail);
-router.post(
-  '/changePassword',
-  auth.validateToken,
-  auth.decryptRequest,
-  api.changePassword
-);
+
 router.post('/forgotPassword', auth.decryptRequest, api.forgotPassword);
 router.post('/resetPassword', auth.decryptRequest, api.resetPassword);
 router.get('/profile', auth.validateToken, api.getProfile);
@@ -22,10 +17,17 @@ router.put(
   auth.decryptRequest,
   api.updateProfile
 );
-router.put(
-  '/profilePic',
+router.post(
+  '/changePassword',
+  auth.validateToken,
   auth.decryptRequest,
-  api.profilePic
+  api.changePassword
 );
+
+// router.put(
+//   '/profilePic',
+//   auth.decryptRequest,
+//   api.profilePic
+// );
 
 module.exports = router;

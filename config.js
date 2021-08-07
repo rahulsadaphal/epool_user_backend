@@ -9,12 +9,11 @@ module.exports = {
   databaseName: process.env.DB_NAME,
   cryptokey: process.env.CRYPTO_KEY, //'commonAPI',
   tokenkey: process.env.TOKEN_KEY,
-  emailVerificationLinkCustomer: process.env.EMAIL_VERIFICATION_LINK_CUSTOMER,
-  emailVerificationLinkOwner: process.env.EMAIL_VERIFICATION_LINK_OWNER,
-  resetPasswordLink: process.env.RESET_PASSWORD_LINK_CUSTOMER,
   emailUser: process.env.EMAIL_USER,
   emailPassword: process.env.EMAIL_PASSWORD,
   supportEmail: process.env.SUPPORT_EMAIL,
   fromName: process.env.SMTP_FROMNAME,
+  backendServerUrlCustomer: process.env.BACKEND_SERVER_URL_CUSTOMER,
+  backendServerUrlOwner: process.env.BACKEND_SERVER_URL_OWNER,
 
 };
